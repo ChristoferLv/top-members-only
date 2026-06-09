@@ -1,9 +1,10 @@
 import { Router } from "express";
-import { getAllMessage, postNewMessage } from "../controllers/messagesController.js";
+import { getAllMessage, newMessageGet, newMessagePost } from "../controllers/messagesController.js";
 const messageRouter = Router();
 
 messageRouter.get("/", getAllMessage)
-messageRouter.post("/new", postNewMessage)
+messageRouter.get("/new", newMessageGet)
+messageRouter.post("/new", newMessagePost)
 
 
 export default messageRouter;

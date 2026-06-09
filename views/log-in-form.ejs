@@ -4,9 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <title>Log In</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
+    <%- include("partials/header.ejs") %>
     <% if (locals.user) {%>
         <script>
             window.location.replace('/');

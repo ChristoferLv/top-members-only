@@ -7,10 +7,12 @@ import bcrypt from 'bcryptjs';
 import { Strategy as LocalStrategy } from 'passport-local';
 import messageRouter from "./routes/messageRoutes.js";
 const dir = import.meta.dirname;
+const assetsPath = join(dir, "public");
 
 const app = express();
 app.set("views", join(dir, "views"));
 app.set("view engine", "ejs");
+app.use(express.static(assetsPath));
 
 app.use(session({ secret: "cats", resave: false, saveUninitialized: false, cookie: { maxAge: 7 * 24 * 60 * 60 * 1000, secure: false, httpOnly: true, sameSite: "lax" } }));
 // app.use(passport.initialize());
@@ -81,7 +83,7 @@ app.use((req, res, next) => {
 app.use("/messages", messageRouter)
 
 app.get("/", (req, res) => {
-  res.render("index");
+  res.redirect("/messages")
 });
 app.get("/log-in", (req, res) => res.render("log-in-form"));
 app.get("/sign-up", (req, res) => res.render("sign-up-form"));

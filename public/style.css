@@ -1,0 +1,37 @@
+body {
+    margin: 0;
+    background-color: #f2f3f4;
+}
+
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #004d8e;
+    padding: 10px 0;
+}
+
+header>a>p {
+    color: white;
+    font-size: 30px;
+    font-family: sans-serif;
+    margin: 0;
+    margin-left: 10px;
+}
+
+.categories-container {
+    display: flex;
+    gap: 0 10px;
+    margin-right: 10px;
+}
+
+header a {
+    text-decoration: none;
+}
+
+.category-item {
+    border: 1px black solid;
+    background-color: rgb(255, 228, 56);
+    color: black;
+    padding: 10px;
+}

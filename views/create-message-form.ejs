@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Log In</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+    <%- include("partials/header.ejs") %>
+        <% if (!locals.user) {%>
+            <script>
+                window.location.replace('/');
+            </script>
+            <% } else { %>
+                <h1>Post new message</h1>
+                <form action="/messages/new" method="POST">
+                    <label for="title">Message Title</label>
+                    <input type="text" name="title" id="title">
+
+                    <label for="content">Content</label>
+                    <input type="text" name="content" id="content">
+
+                    <input type="submit" value="Send">
+                </form>
+                <%}%>
+</body>
+
+</html>

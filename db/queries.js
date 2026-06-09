@@ -20,7 +20,7 @@ async function queryAllMessages() {
         const result = await db.query("Select * FROM messages");
         return result;
     } catch (error) {
-        console.error('Insert failed due to database error:', error.message);
+        console.error('Query failed due to database error:', error.message);
     }
 }
 

@@ -1,0 +1,17 @@
+<header>
+    <a href="/">
+        <p>Secret Club Message Board</p>
+    </a>
+    <% if (locals.user) {%>
+        <div class="categories-container">
+            <a href="/messages/new" class="category-item">Post new Message</a>
+            <a href="/log-out" class="category-item">LOG OUT</a>
+        </div>
+        <% } %>
+            <% if (!locals.user) {%>
+                <div class="categories-container">
+                    <a href="/log-in" class="category-item">LOG IN</a>
+                    <a href="/sign-up" class="category-item">SIGN UP</a>
+                </div>
+                <% } %>
+</header>

@@ -4,22 +4,15 @@
 <head>
   <meta charset="UTF-8">
   <title>Home</title>
+  <link rel="stylesheet" href="/style.css">
 </head>
 
 <body>
-  <% if (locals.user) {%>
-    <h1>WELCOME BACK <%= user.username %>
-    </h1>
-    <a href="/log-out">LOG OUT</a>
-    <% } else { %>
-      <h1>please log in</h1>
-      <a href="/log-in">LOG IN</a>
-      <p>Or create an account</p>
-      <a href="/sign-up">SIGN UP</a>
-
-      <a href="/sign-up">Messages</a>
+  <%- include("partials/header.ejs") %>
+    <% if (locals.user) {%>
+      <h1>WELCOME BACK <%= user.username %>
+      </h1>
       <% } %>
-
         <div class="new-form-container">
           <p>Post new Message</p>
           <form action="/messages/new" method="POST">
@@ -28,9 +21,22 @@
 
             <label for="content">Content</label>
             <input type="text" name="content" id="content">
-           
+
             <input type="submit" value="Send">
           </form>
+          <ul>
+            <% messages.map((message)=> { %>
+              <li>
+                <div id=<%=message.id %> class="message_item">
+                  <p>Posted by: <strong>
+                      <%= message.author %>
+                    </strong> at <%= message.added.toDateString() %>:<br>
+                      ><%= message.title %> -- <%= message.content %>
+                  </p>
+                </div>
+              </li>
+              <% }) %>
+          </ul>
         </div>
 </body>
 

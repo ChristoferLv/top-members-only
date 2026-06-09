@@ -4,7 +4,11 @@ import { insertNewMessage, queryAllMessages } from "../db/queries.js";
 const validateMessage = [
 ];
 
-async function postNewMessage(req, res) {
+async function newMessageGet(req, res) {
+    res.render("create-message-form");
+}
+
+async function newMessagePost(req, res) {
     console.log("new messge", req.body)
     await insertNewMessage(req.user.id, req.body.title, req.body.content);
     res.redirect("/");
@@ -12,11 +16,12 @@ async function postNewMessage(req, res) {
 
 async function getAllMessage(req, res) {
     const { rows } = await queryAllMessages();
-    res.render("messages_list", { messages: rows });
+    res.render("index", { messages: rows });
 }
 
 
 export {
-    postNewMessage,
-    getAllMessage
+    newMessagePost,
+    getAllMessage,
+    newMessageGet
 }
