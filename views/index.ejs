@@ -14,7 +14,24 @@
     <% } else { %>
       <h1>please log in</h1>
       <a href="/log-in">LOG IN</a>
+      <p>Or create an account</p>
+      <a href="/sign-up">SIGN UP</a>
+
+      <a href="/sign-up">Messages</a>
       <% } %>
+
+        <div class="new-form-container">
+          <p>Post new Message</p>
+          <form action="/messages/new" method="POST">
+            <label for="title">Message Title</label>
+            <input type="text" name="title" id="title">
+
+            <label for="content">Content</label>
+            <input type="text" name="content" id="content">
+           
+            <input type="submit" value="Send">
+          </form>
+        </div>
 </body>
 
 </html>

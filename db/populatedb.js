@@ -1,10 +1,21 @@
 import { Client } from "pg";
 
 const SQL = `
-CREATE TABLE users (
+CREATE TABLE IF NOT EXISTS users (
    id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-   username VARCHAR ( 255 ),
-   password VARCHAR ( 255 )
+   username VARCHAR (255),
+   password VARCHAR (255),
+   is_member BOOLEAN,
+   is_admin BOOLEAN
+);
+
+CREATE TABLE IF NOT EXISTS messages (
+  id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  title VARCHAR(30),
+  content VARCHAR(255),
+  added TIMESTAMPTZ,
+  author INTEGER,
+  FOREIGN KEY (author) REFERENCES users (id) 
 );
 `;
 

@@ -5,14 +5,15 @@ import session from "express-session";
 import passport from "passport";
 import bcrypt from 'bcryptjs';
 import { Strategy as LocalStrategy } from 'passport-local';
+import messageRouter from "./routes/messageRoutes.js";
 const dir = import.meta.dirname;
 
 const app = express();
 app.set("views", join(dir, "views"));
 app.set("view engine", "ejs");
 
-app.use(session({ secret: "cats", resave: false, saveUninitialized: false }));
-app.use(passport.initialize());
+app.use(session({ secret: "cats", resave: false, saveUninitialized: false, cookie: { maxAge: 7 * 24 * 60 * 60 * 1000, secure: false, httpOnly: true, sameSite: "lax" } }));
+// app.use(passport.initialize());
 app.use(passport.session());
 app.use(urlencoded({ extended: false }));
 
@@ -39,10 +40,13 @@ passport.use(
 );
 
 passport.serializeUser((user, done) => {
+  console.log("seriaolize", user)
   done(null, user.id);
 });
 
 passport.deserializeUser(async (id, done) => {
+  console.log("deseriaolize", id)
+
   try {
     const { rows } = await db.query("SELECT * FROM users WHERE id = $1", [id]);
     const user = rows[0];
@@ -54,14 +58,32 @@ passport.deserializeUser(async (id, done) => {
 });
 
 app.use((req, res, next) => {
-  res.locals.currentUser = req.user;
+  try {
+    const timestamp = new Date().toISOString();
+    const method = req.method;
+    const url = req.url || req.originalUrl || 'unknown';
+    console.log(`📝 ${timestamp} - ${method} ${url}`);
+    console.log("   └req.body ->", req.body)
+    //console.log(req.headers.cookie)
+    next();
+  } catch (error) {
+    console.error("❌ Erro no middleware de log:", error);
+    next(); // Continue mesmo com erro no log
+  }
+});
+
+app.use((req, res, next) => {
+  res.locals.user = req.user;
+  console.log("user", req.user)
   next();
 });
 
+app.use("/messages", messageRouter)
+
 app.get("/", (req, res) => {
-  res.render("index", { user: req.user });
+  res.render("index");
 });
-app.get("/log-in", (req, res) => res.render("log-in-form", { user: req.user }));
+app.get("/log-in", (req, res) => res.render("log-in-form"));
 app.get("/sign-up", (req, res) => res.render("sign-up-form"));
 app.post("/sign-up", async (req, res, next) => {
   try {
@@ -77,9 +99,10 @@ app.post("/sign-up", async (req, res, next) => {
 app.post(
   "/log-in",
   passport.authenticate("local", {
-    successRedirect: "/log-in",
-    failureRedirect: "/",
+    successRedirect: "/",
+    failureRedirect: "/log-in",
     failureMessage: true,
+
   })
 );
 
@@ -99,7 +122,7 @@ app.use((err, req, res, next) => {
   }
 
   const statusCode = err.status || 500;
-  
+
   res.status(statusCode).json({
     success: false,
     message: err.message || 'Internal Server Error',

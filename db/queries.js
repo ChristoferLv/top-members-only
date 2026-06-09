@@ -1,2 +1,35 @@
 import { db } from "./pools.js";
 
+async function insertNewMessage(author, title, content) {
+    try {
+        const added = new Date(Date.now()).toISOString();
+        const result = await db.query("INSERT INTO messages (title, content, added, author) VALUES ($1, $2, $3, $4)", [title, content, added, author]);
+
+        if (result.rowCount > 0) {
+            console.log('Insert successful!');
+        } else {
+            console.log('Query finished, but no rows were inserted.');
+        }
+    } catch (error) {
+        console.error('Insert failed due to database error:', error.message);
+    }
+}
+
+async function queryAllMessages() {
+    try {
+        const result = await db.query("Select * FROM messages");
+        return result;
+    } catch (error) {
+        console.error('Insert failed due to database error:', error.message);
+    }
+}
+
+
+
+
+
+export {
+    insertNewMessage,
+    queryAllMessages
+}
+
