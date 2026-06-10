@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Sign Up</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <%- include("partials/header.ejs") %>
+    <div class="login">
+      <form action="/sign-up" method="POST">
+        <h1>Place your code here</h1>
+        <label for="username">
+          Code:
+        </label>
+        <input type="text" id="username" name="username" placeholder="****" required>
+
+        <div class="wrap">
+          <button type="submit">
+            Submit
+          </button>
+        </div>
+      </form>
+    </div>
+</body>
+
+</html>

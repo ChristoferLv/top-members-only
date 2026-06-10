@@ -2,10 +2,11 @@ import { join } from "node:path";
 import { db } from "./db/pools.js";
 import express, { urlencoded } from "express";
 import session from "express-session";
-import passport from "passport";
+import {passport} from "./authUtils.js";
 import bcrypt from 'bcryptjs';
 import { Strategy as LocalStrategy } from 'passport-local';
 import messageRouter from "./routes/messageRoutes.js";
+import authRouter from "./routes/authRoutes.js";
 const dir = import.meta.dirname;
 const assetsPath = join(dir, "public");
 
@@ -19,45 +20,45 @@ app.use(session({ secret: "cats", resave: false, saveUninitialized: false, cooki
 app.use(passport.session());
 app.use(urlencoded({ extended: false }));
 
-passport.use(
-  new LocalStrategy(async (username, password, done) => {
-    try {
-      const { rows } = await db.query("SELECT * FROM users WHERE username = $1", [username]);
-      const user = rows[0];
+// passport.use(
+//   new LocalStrategy(async (username, password, done) => {
+//     try {
+//       const { rows } = await db.query("SELECT * FROM users WHERE username = $1", [username]);
+//       const user = rows[0];
 
-      if (!user) {
-        return done(null, false, { message: "Incorrect username" });
-      }
+//       if (!user) {
+//         return done(null, false, { message: "Incorrect username" });
+//       }
 
-      const match = await bcrypt.compare(password, user.password);
-      if (!match) {
-        return done(null, false, { message: "Incorrect password" })
-      }
+//       const match = await bcrypt.compare(password, user.password);
+//       if (!match) {
+//         return done(null, false, { message: "Incorrect password" })
+//       }
 
-      return done(null, user);
-    } catch (err) {
-      return done(err);
-    }
-  })
-);
+//       return done(null, user);
+//     } catch (err) {
+//       return done(err);
+//     }
+//   })
+// );
 
-passport.serializeUser((user, done) => {
-  console.log("seriaolize", user)
-  done(null, user.id);
-});
+// passport.serializeUser((user, done) => {
+//   console.log("seriaolize", user)
+//   done(null, user.id);
+// });
 
-passport.deserializeUser(async (id, done) => {
-  console.log("deseriaolize", id)
+// passport.deserializeUser(async (id, done) => {
+//   console.log("deseriaolize", id)
 
-  try {
-    const { rows } = await db.query("SELECT * FROM users WHERE id = $1", [id]);
-    const user = rows[0];
+//   try {
+//     const { rows } = await db.query("SELECT * FROM users WHERE id = $1", [id]);
+//     const user = rows[0];
 
-    done(null, user);
-  } catch (err) {
-    done(err);
-  }
-});
+//     done(null, user);
+//   } catch (err) {
+//     done(err);
+//   }
+// });
 
 app.use((req, res, next) => {
   try {
@@ -80,42 +81,40 @@ app.use((req, res, next) => {
   next();
 });
 
+
+
+app.use("/auth", authRouter)
 app.use("/messages", messageRouter)
 
 app.get("/", (req, res) => {
   res.redirect("/messages")
 });
-app.get("/log-in", (req, res) => res.render("log-in-form"));
-app.get("/sign-up", (req, res) => res.render("sign-up-form"));
-app.post("/sign-up", async (req, res, next) => {
-  try {
-    const hashedPassword = await bcrypt.hash(req.body.password, 10);
-    await db.query("INSERT INTO users (username, password) VALUES ($1, $2)", [req.body.username, hashedPassword]);
-    res.redirect("/");
-  } catch (error) {
-    console.error(error);
-    next(error);
-  }
+app.get("/become-member", (req, res) => {
+  res.render("upgrade-user")
 });
 
-app.post(
-  "/log-in",
-  passport.authenticate("local", {
-    successRedirect: "/",
-    failureRedirect: "/log-in",
-    failureMessage: true,
+// app.get("/log-in", (req, res) => res.render("log-in-form"));
+// app.get("/sign-up", (req, res) => res.render("sign-up-form"));
+// app.post("/sign-up", async (req, res, next) => {
+//   try {
+//     const hashedPassword = await bcrypt.hash(req.body.password, 10);
+//     await db.query("INSERT INTO users (username, password) VALUES ($1, $2)", [req.body.username, hashedPassword]);
+//     res.redirect("/");
+//   } catch (error) {
+//     console.error(error);
+//     next(error);
+//   }
+// });
 
-  })
-);
 
-app.get("/log-out", (req, res, next) => {
-  req.logout((err) => {
-    if (err) {
-      return next(err);
-    }
-    res.redirect("/");
-  });
-});
+// app.get("/log-out", (req, res, next) => {
+//   req.logout((err) => {
+//     if (err) {
+//       return next(err);
+//     }
+//     res.redirect("/");
+//   });
+// });
 
 
 app.use((err, req, res, next) => {

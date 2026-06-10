@@ -9,7 +9,6 @@ async function newMessageGet(req, res) {
 }
 
 async function newMessagePost(req, res) {
-    console.log("new messge", req.body)
     await insertNewMessage(req.user.id, req.body.title, req.body.content);
     res.redirect("/");
 }
