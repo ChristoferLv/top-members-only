@@ -9,20 +9,37 @@
 
 <body>
     <%- include("partials/header.ejs") %>
-    <% if (locals.user) {%>
-        <script>
-            window.location.replace('/');
-        </script>
-        <% } else { %>
-            <h1>please log in</h1>
-            <form action="/log-in" method="POST">
-                <label for="username">Username</label>
-                <input id="username" name="username" placeholder="username" type="text" />
-                <label for="password">Password</label>
-                <input id="password" name="password" type="password" />
-                <button type="submit">Log In</button>
-            </form>
-            <%}%>
+        <% if (locals.user) {%>
+            <script>
+                window.location.replace('/');
+            </script>
+            <% } else { %>
+                <div class="login">
+                    <form action="/log-in" method="POST">
+                        <h1>Log in</h1>
+                        <label for="username">
+                            Username:
+                        </label>
+                        <input type="text" id="username" name="username" placeholder="Enter your Username" required>
+
+                        <label for="password">
+                            Password:
+                        </label>
+                        <input type="password" id="password" name="password" placeholder="Enter your Password" required>
+
+                        <div class="wrap">
+                            <button type="submit">
+                                Submit
+                            </button>
+                        </div>
+                        <p>Not registered?
+                            <a href="/sign-up" style="text-decoration: none;">
+                                Create an account
+                            </a>
+                        </p>
+                    </form>
+                </div>
+                <%}%>
 </body>
 
 </html>

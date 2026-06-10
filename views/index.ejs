@@ -13,31 +13,30 @@
       <h1>WELCOME BACK <%= user.username %>
       </h1>
       <% } %>
-        <div class="new-form-container">
-          <p>Post new Message</p>
-          <form action="/messages/new" method="POST">
-            <label for="title">Message Title</label>
-            <input type="text" name="title" id="title">
+        <h1>Board Messages</h1>
+        <hr>
+        <div class="messages">
+          <% messages.map((message)=> { %>
+            <div id=<%=message.id %> class="message-card">
+              <strong>
+                <%= message.title %>
+              </strong>
+              <p>Posted by: <strong>
+                  <% if (locals.user) {%>
+                    <%= user.username %>
+                      <% }else{ %>
+                        <%= "Anonymous" %>
+                          <%}%>
+                </strong>
+              </p>
+              <p>At <%= message.added.toDateString() %>
+              </p>
+              > <%= message.content %>
+            </div>
 
-            <label for="content">Content</label>
-            <input type="text" name="content" id="content">
-
-            <input type="submit" value="Send">
-          </form>
-          <ul>
-            <% messages.map((message)=> { %>
-              <li>
-                <div id=<%=message.id %> class="message_item">
-                  <p>Posted by: <strong>
-                      <%= message.author %>
-                    </strong> at <%= message.added.toDateString() %>:<br>
-                      ><%= message.title %> -- <%= message.content %>
-                  </p>
-                </div>
-              </li>
-              <% }) %>
-          </ul>
+            <% }) %>
         </div>
+
 </body>
 
 </html>

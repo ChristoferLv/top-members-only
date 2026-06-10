@@ -1,6 +1,7 @@
 body {
     margin: 0;
     background-color: #f2f3f4;
+    height: 100vh;
 }
 
 header {
@@ -29,9 +30,89 @@ header a {
     text-decoration: none;
 }
 
+h1 {
+    margin-left: 6px;
+}
+
 .category-item {
     border: 1px black solid;
     background-color: rgb(255, 228, 56);
     color: black;
     padding: 10px;
+}
+
+.messages {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 10vw));
+    gap: 10px;
+    padding: 10px;
+}
+
+.message-card {
+    border: 1px solid black;
+    max-width: 15vw;
+    background-color: #fefefe;
+    padding: 5px;
+}
+
+.message-card p {
+    margin: 3px;
+}
+
+.login{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 90%;
+    overflow-y: hidden;
+}
+
+.login form{
+    background-color: #fff;
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    padding: 10px 20px;
+    transition: transform 0.2s;
+    width: 500px;
+    text-align: center;
+
+}
+
+label {
+    display: block;
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    text-align: left;
+    color: #555;
+    font-weight: bold;
+}
+
+input {
+    display: block;
+    width: 100%;
+    margin-bottom: 15px;
+    padding: 10px;
+    box-sizing: border-box;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+button {
+    padding: 15px;
+    border-radius: 10px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    border: none;
+    color: white;
+    cursor: pointer;
+    background-color: #4CAF50;
+    width: 100%;
+    font-size: 16px;
+}
+
+.wrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
