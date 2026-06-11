@@ -10,16 +10,16 @@
 <body>
   <%- include("partials/header.ejs") %>
     <div class="login">
-      <form action="/sign-up" method="POST">
+      <form action="/auth/upgrade-to-member" method="POST">
         <h1>Place your code here</h1>
-        <label for="username">
+        <label for="code">
           Code:
         </label>
-        <input type="text" id="username" name="username" placeholder="****" required>
+        <input type="text" id="code" name="code" placeholder="****" required>
 
         <div class="wrap">
           <button type="submit">
-            Submit
+            Upgrade
           </button>
         </div>
       </form>

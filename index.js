@@ -2,7 +2,7 @@ import { join } from "node:path";
 import { db } from "./db/pools.js";
 import express, { urlencoded } from "express";
 import session from "express-session";
-import {passport} from "./authUtils.js";
+import { passport } from "./authUtils.js";
 import bcrypt from 'bcryptjs';
 import { Strategy as LocalStrategy } from 'passport-local';
 import messageRouter from "./routes/messageRoutes.js";
@@ -90,7 +90,11 @@ app.get("/", (req, res) => {
   res.redirect("/messages")
 });
 app.get("/become-member", (req, res) => {
-  res.render("upgrade-user")
+  if (!req.user) {
+    res.redirect("/");
+  } else {
+    res.render("upgrade-user")
+  }
 });
 
 // app.get("/log-in", (req, res) => res.render("log-in-form"));

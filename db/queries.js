@@ -17,8 +17,16 @@ async function insertNewMessage(author, title, content) {
 
 async function queryAllMessages() {
     try {
-        const result = await db.query("Select * FROM messages");
+        const result = await db.query("SELECT * FROM messages");
         return result;
+    } catch (error) {
+        console.error('Query failed due to database error:', error.message);
+    }
+}
+
+async function updateToMember(id) {
+    try {
+        await db.query("UPDATE users SET is_member=true");
     } catch (error) {
         console.error('Query failed due to database error:', error.message);
     }
@@ -30,6 +38,7 @@ async function queryAllMessages() {
 
 export {
     insertNewMessage,
-    queryAllMessages
+    queryAllMessages,
+    updateToMember
 }
 
