@@ -1,9 +1,10 @@
 import bcrypt from 'bcryptjs';
 import { db } from "../db/pools.js";
 import { passport } from "../authUtils.js"
-import { updateToMember } from '../db/queries.js';
+import { updateToAdmin, updateToMember } from '../db/queries.js';
 
 const MEMBER_SECRET_CODE = 123;
+const ADMIN_SECRET_CODE = 321;
 
 function loginGet(req, res) {
     res.render("log-in-form")
@@ -41,26 +42,10 @@ function logout(req, res, next) {
     });
 }
 
-function turnIntoMember(req, res) {
-    if (!req.user)
-        res.redirect("/messages");
-    
-    try {
-        if (req.body.code == MEMBER_SECRET_CODE) {
-            updateToMember(req.user.id);
-            res.redirect("/");
-        }
-    } catch (error) {
-        console.error(error);
-        next(error);
-    }
-}
-
 export {
     loginGet,
     loginPost,
     registerGet,
     registerPost,
     logout,
-    turnIntoMember
 }

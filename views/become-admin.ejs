@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Sign Up</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+  <%- include("partials/header.ejs") %>
+    <div class="login">
+      <form action="/user/upgrade-to-admin" method="POST">
+        <h1>Place your ADMIN code here</h1>
+        <label for="code">
+          Code:
+        </label>
+        <input type="text" id="code" name="code" placeholder="****" required>
+
+        <div class="wrap alert">
+          <button type="submit">
+            Become Admin
+          </button>
+        </div>
+      </form>
+    </div>
+</body>
+
+</html>

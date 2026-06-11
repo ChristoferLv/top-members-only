@@ -116,3 +116,11 @@ button {
     justify-content: center;
     align-items: center;
 }
+
+.alert button{
+    background-color: rgb(226, 0, 0);
+}
+
+.alert button:hover{
+    background-color: rgb(211, 0, 35);
+}

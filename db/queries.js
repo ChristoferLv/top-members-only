@@ -26,7 +26,15 @@ async function queryAllMessages() {
 
 async function updateToMember(id) {
     try {
-        await db.query("UPDATE users SET is_member=true");
+        await db.query("UPDATE users SET is_member=true  WHERE id=$1", [id]);
+    } catch (error) {
+        console.error('Query failed due to database error:', error.message);
+    }
+}
+
+async function updateToAdmin(id) {
+    try {
+        await db.query("UPDATE users SET is_member=true, is_admin=true WHERE id=$1", [id]);
     } catch (error) {
         console.error('Query failed due to database error:', error.message);
     }
@@ -39,6 +47,7 @@ async function updateToMember(id) {
 export {
     insertNewMessage,
     queryAllMessages,
-    updateToMember
+    updateToMember,
+    updateToAdmin
 }
 

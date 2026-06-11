@@ -7,6 +7,7 @@ import bcrypt from 'bcryptjs';
 import { Strategy as LocalStrategy } from 'passport-local';
 import messageRouter from "./routes/messageRoutes.js";
 import authRouter from "./routes/authRoutes.js";
+import userRouter from "./routes/userRoutes.js";
 const dir = import.meta.dirname;
 const assetsPath = join(dir, "public");
 
@@ -82,20 +83,14 @@ app.use((req, res, next) => {
 });
 
 
-
+app.use("/user", userRouter)
 app.use("/auth", authRouter)
 app.use("/messages", messageRouter)
 
 app.get("/", (req, res) => {
   res.redirect("/messages")
 });
-app.get("/become-member", (req, res) => {
-  if (!req.user) {
-    res.redirect("/");
-  } else {
-    res.render("upgrade-user")
-  }
-});
+
 
 // app.get("/log-in", (req, res) => res.render("log-in-form"));
 // app.get("/sign-up", (req, res) => res.render("sign-up-form"));

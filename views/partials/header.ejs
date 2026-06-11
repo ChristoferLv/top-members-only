@@ -7,7 +7,10 @@
             <a href="/messages/new" class="category-item">Post new Message</a>
             <a href="/auth/log-out" class="category-item">LOG OUT</a>
             <% if (!locals.user.is_member) {%>
-                        <a href="/become-member" class="category-item">Have a member code?</a>
+                <a href="/user/upgrade-to-member" class="category-item">Have a member code?</a>
+                <% } %>
+                    <% if (locals.user.is_member && !locals.user.is_admin) {%>
+                        <a href="/user/upgrade-to-admin" class="category-item">Have a admin code?</a>
                         <% } %>
         </div>
         <% } %>
