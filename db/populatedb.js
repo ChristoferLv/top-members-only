@@ -3,8 +3,8 @@ import { Client } from "pg";
 const SQL = `
 CREATE TABLE IF NOT EXISTS users (
    id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-   username VARCHAR (255),
-   password VARCHAR (255),
+   username VARCHAR (20),
+   password CHAR(60),
    is_member BOOLEAN DEFAULT false,
    is_admin BOOLEAN DEFAULT false
 );

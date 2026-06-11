@@ -22,8 +22,8 @@ const newMessagePost = [validateMessage,
         if (!errors.isEmpty()) {
             return res.status(400).render("create-message-form", {
                 errors: errorsObj,
-                recoveredTitle:req.body.title,
-                recoveredContent:req.body.content
+                recoveredTitle: req.body.title,
+                recoveredContent: req.body.content
             });
         }
 

@@ -2,9 +2,17 @@ import bcrypt from 'bcryptjs';
 import { db } from "../db/pools.js";
 import { passport } from "../authUtils.js"
 import { updateToAdmin, updateToMember } from '../db/queries.js';
+import { body, matchedData, validationResult } from "express-validator";
 
 const MEMBER_SECRET_CODE = 123;
 const ADMIN_SECRET_CODE = 321;
+
+
+const validateNewUser = [
+    body("username").matches(/^[a-zA-Z0-9\s\-.]+$/).withMessage("Username can only contain letters, numbers, space, - and .").trim().isLength({ max: 30 }).withMessage("The maximum username length is 30"),
+    body("password").trim().isLength({ max: 50 }).withMessage("The maximum password length is 50")
+];
+
 
 function loginGet(req, res) {
     res.render("log-in-form")
@@ -22,16 +30,45 @@ function registerGet(req, res) {
     res.render("sign-up-form")
 }
 
-async function registerPost(req, res) {
-    try {
-        const hashedPassword = await bcrypt.hash(req.body.password, 10);
-        await db.query("INSERT INTO users (username, password) VALUES ($1, $2)", [req.body.username, hashedPassword]);
-        res.redirect("/");
-    } catch (error) {
-        console.error(error);
-        next(error);
-    }
-}
+const registerPost = [validateNewUser,
+    async (req, res) => {
+        const errors = validationResult(req);
+        const errorsObj = {};
+        errors.array().forEach(error => {
+            if (error.path in errorsObj)
+                errorsObj[error.path] = `• ${errorsObj[error.path]} <br> • ${error.msg}`;
+            else
+                errorsObj[error.path] = error.msg;
+        });
+
+        if (!errors.isEmpty()) {
+            return res.status(400).render("sign-up-form", {
+                errors: errorsObj,
+                recoveredUsername: req.body.username,
+            });
+        }
+
+        try {
+            const { username, password } = matchedData(req);
+            const hashedPassword = await bcrypt.hash(password, 10);
+            await db.query("INSERT INTO users (username, password) VALUES ($1, $2)", [username, hashedPassword]);
+            res.redirect("/");
+        } catch (error) {
+            console.error(error);
+            next(error);
+        }
+    }]
+
+// async function registerPost(req, res) {
+//     try {
+//         const hashedPassword = await bcrypt.hash(req.body.password, 10);
+//         await db.query("INSERT INTO users (username, password) VALUES ($1, $2)", [req.body.username, hashedPassword]);
+//         res.redirect("/");
+//     } catch (error) {
+//         console.error(error);
+//         next(error);
+//     }
+// }
 
 function logout(req, res, next) {
     req.logout((err) => {
