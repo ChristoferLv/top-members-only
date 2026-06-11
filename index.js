@@ -8,15 +8,18 @@ import { Strategy as LocalStrategy } from 'passport-local';
 import messageRouter from "./routes/messageRoutes.js";
 import authRouter from "./routes/authRoutes.js";
 import userRouter from "./routes/userRoutes.js";
+import pgSession from "connect-pg-simple"
 const dir = import.meta.dirname;
 const assetsPath = join(dir, "public");
+
+const pgsSession = pgSession(session);
 
 const app = express();
 app.set("views", join(dir, "views"));
 app.set("view engine", "ejs");
 app.use(express.static(assetsPath));
 
-app.use(session({ secret: "cats", resave: false, saveUninitialized: false, cookie: { maxAge: 7 * 24 * 60 * 60 * 1000, secure: false, httpOnly: true, sameSite: "lax" } }));
+app.use(session({ store: new pgsSession({ pool: db }), secret: "cats", resave: false, saveUninitialized: false, cookie: { maxAge: 7 * 24 * 60 * 60 * 1000, secure: false, httpOnly: true, sameSite: "lax" } }));
 // app.use(passport.initialize());
 app.use(passport.session());
 app.use(urlencoded({ extended: false }));
