@@ -56,7 +56,7 @@ const turnIntoAdminPost = [validateAdminCode,
         }
 
         try {
-            updateToMember(req.user.id);
+            updateToAdmin(req.user.id);
             res.redirect("/");
         } catch (error) {
             console.error(error);
