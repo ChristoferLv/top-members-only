@@ -1,9 +1,9 @@
 import { body, matchedData, validationResult } from "express-validator";
-import { insertNewMessage, queryAllMessages } from "../db/queries.js";
+import { deleteMessageById, insertNewMessage, queryAllMessages } from "../db/queries.js";
 
 const validateMessage = [
-    body("title").matches(/^[a-zA-Z0-9\s\-_,.!?]+$/).withMessage("Title contains invalid characters").trim().isLength({ max: 30 }).withMessage("The maximum title length is 30"),
-    body("content").trim().isLength({ max: 255 }).withMessage("The maximum content length is 255")
+    body("title").matches(/^[a-zA-Z0-9\s\-_,.!?]+$/).withMessage("Title contains invalid characters").trim().isLength({ min: 3 }).withMessage("The title must have at leats 3 characteres").isLength({ max: 30 }).withMessage("The maximum title length is 30"),
+    body("content").trim().isLength({ min: 3 }).withMessage("The content must have at leats 3 characteres").isLength({ max: 255 }).withMessage("The maximum content length is 255")
 ];
 
 async function newMessageGet(req, res) {
@@ -60,9 +60,15 @@ async function getAllMessage(req, res) {
     res.render("index", { messages: rows });
 }
 
+async function removeMessageById(req, res) {
+    await deleteMessageById(req.params.id);
+    res.redirect("/messages");
+}
+
 
 export {
     newMessagePost,
     getAllMessage,
-    newMessageGet
+    newMessageGet,
+    removeMessageById
 }

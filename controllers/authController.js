@@ -9,8 +9,8 @@ const ADMIN_SECRET_CODE = 321;
 
 
 const validateNewUser = [
-    body("username").matches(/^[a-zA-Z0-9\s\-.]+$/).withMessage("Username can only contain letters, numbers, space, - and .").trim().isLength({ max: 30 }).withMessage("The maximum username length is 30"),
-    body("password").trim().isLength({ max: 50 }).withMessage("The maximum password length is 50")
+    body("username").matches(/^[a-zA-Z0-9\s\-.]+$/).withMessage("Username can only contain letters, numbers, space, - and .").trim().isLength({ min: 3 }).withMessage("Username must have at leats 3 characteres").isLength({ max: 30 }).withMessage("The maximum username length is 30"),
+    body("password").trim().isLength({ min: 3 }).withMessage("Password must have at leats 3 characteres").isLength({ max: 50 }).withMessage("The maximum password length is 50")
 ];
 
 

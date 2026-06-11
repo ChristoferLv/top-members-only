@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>Home</title>
+  <title>SCMB</title>
   <link rel="stylesheet" href="/style.css">
 </head>
 
@@ -19,7 +19,7 @@
           <% messages.map((message)=> { %>
             <div id=<%=message.id %> class="message-card">
               <strong>
-                <%= message.title %>
+                <%= message.title %> - <%=message.id %>
               </strong>
               <p>Posted by: <strong>
                   <% if (locals.user && user.is_member) {%>
@@ -32,6 +32,12 @@
               <p>At <%= message.added.toDateString()%> - <%=message.added.toLocaleTimeString()%>
               </p>
               > <%= message.content %>
+                <% if (locals.user && user.is_admin) {%>
+                  <form action="/messages/delete/<%= message.id %>" method="post">
+                    <input class="del-btn" type="submit" value="Del">
+                  </form>
+                  <% } %>
+
             </div>
 
             <% }) %>

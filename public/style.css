@@ -53,13 +53,29 @@ h1 {
     max-width: 15vw;
     background-color: #fefefe;
     padding: 5px;
+    display: flex;
+    flex-direction: column;
 }
 
 .message-card p {
     margin: 3px;
 }
 
-.login{
+.message-card form {
+    margin-top: auto;
+    margin-top: 10px;
+    align-self: flex-end;
+    flex-grow: 1;
+}
+
+.del-btn {
+    width: 40px;
+    margin: 0;
+    padding: 2px 1px;
+    cursor: pointer;
+}
+
+.login {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -67,7 +83,7 @@ h1 {
     overflow-y: hidden;
 }
 
-.login form{
+.login form {
     background-color: #fff;
     border-radius: 15px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
@@ -117,15 +133,15 @@ button {
     align-items: center;
 }
 
-.alert button{
+.alert button {
     background-color: rgb(226, 0, 0);
 }
 
-.alert button:hover{
+.alert button:hover {
     background-color: rgb(211, 0, 35);
 }
 
-.error{
+.error {
     text-align: start;
     margin-top: -12px;
     margin-left: 5px;
