@@ -16,7 +16,11 @@
           Code:
         </label>
         <input type="text" id="code" name="code" placeholder="****" required>
-
+        <% if (locals.errors) {%>
+          <p class="error">
+            <%=errors.msg%>
+          </p>
+          <% } %>
         <div class="wrap">
           <button type="submit">
             Upgrade

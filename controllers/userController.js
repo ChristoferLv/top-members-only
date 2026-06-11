@@ -1,8 +1,16 @@
 import { updateToAdmin, updateToMember } from '../db/queries.js';
+import { body, matchedData, validationResult } from "express-validator";
 
-const MEMBER_SECRET_CODE = 123;
-const ADMIN_SECRET_CODE = 321;
+const MEMBER_SECRET_CODE = "123";
+const ADMIN_SECRET_CODE = "321";
 
+const validateMemberCode = [
+    body("code").trim().equals(MEMBER_SECRET_CODE).withMessage("Member code is incorrect")
+];
+
+const validateAdminCode = [
+    body("code").trim().equals(ADMIN_SECRET_CODE).withMessage("Admin code is incorrect!")
+];
 
 function turnIntoMemberGet(req, res) {
     if (!req.user) {
@@ -12,20 +20,24 @@ function turnIntoMemberGet(req, res) {
     }
 }
 
-function turnIntoMemberPost(req, res) {
-    if (!req.user)
-        res.redirect("/messages");
+const turnIntoMemberPost = [validateMemberCode,
+    async (req, res) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).render("upgrade-user", {
+                errors: errors.array()[0]
+            });
+        }
 
-    try {
-        if (req.body.code == MEMBER_SECRET_CODE) {
+        try {
             updateToMember(req.user.id);
             res.redirect("/");
+        } catch (error) {
+            console.error(error);
+            next(error);
         }
-    } catch (error) {
-        console.error(error);
-        next(error);
     }
-}
+];
 
 function turnIntoAdminGet(req, res) {
     if (!req.user)
@@ -34,19 +46,24 @@ function turnIntoAdminGet(req, res) {
         res.render("become-admin");
 }
 
-function turnIntoAdminPost(req, res) {
-    if (!req.user)
-        res.redirect("/messages");
-    try {
-        if (req.body.code == ADMIN_SECRET_CODE) {
-            updateToAdmin(req.user.id);
-            res.redirect("/");
+const turnIntoAdminPost = [validateAdminCode,
+    async (req, res) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).render("become-admin", {
+                errors: errors.array()[0]
+            });
         }
-    } catch (error) {
-        console.error(error);
-        next(error);
+
+        try {
+            updateToMember(req.user.id);
+            res.redirect("/");
+        } catch (error) {
+            console.error(error);
+            next(error);
+        }
     }
-}
+];
 
 export {
     turnIntoMemberGet,

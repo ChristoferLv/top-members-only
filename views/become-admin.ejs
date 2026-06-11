@@ -16,12 +16,16 @@
           Code:
         </label>
         <input type="text" id="code" name="code" placeholder="****" required>
-
-        <div class="wrap alert">
-          <button type="submit">
-            Become Admin
-          </button>
-        </div>
+        <% if (locals.errors) {%>
+          <p class="error">
+            <%=errors.msg%>
+          </p>
+          <% } %>
+            <div class="wrap alert">
+              <button type="submit">
+                Become Admin
+              </button>
+            </div>
       </form>
     </div>
 </body>
