@@ -78,17 +78,6 @@ const registerPost = [validateNewUser,
         }
     }]
 
-// async function registerPost(req, res) {
-//     try {
-//         const hashedPassword = await bcrypt.hash(req.body.password, 10);
-//         await db.query("INSERT INTO users (username, password) VALUES ($1, $2)", [req.body.username, hashedPassword]);
-//         res.redirect("/");
-//     } catch (error) {
-//         console.error(error);
-//         next(error);
-//     }
-// }
-
 function logout(req, res, next) {
     req.logout((err) => {
         if (err) {

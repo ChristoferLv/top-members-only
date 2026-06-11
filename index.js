@@ -24,99 +24,20 @@ app.use(session({ store: new pgsSession({ pool: db }), secret: "cats", resave: f
 app.use(passport.session());
 app.use(urlencoded({ extended: false }));
 
-// passport.use(
-//   new LocalStrategy(async (username, password, done) => {
-//     try {
-//       const { rows } = await db.query("SELECT * FROM users WHERE username = $1", [username]);
-//       const user = rows[0];
-
-//       if (!user) {
-//         return done(null, false, { message: "Incorrect username" });
-//       }
-
-//       const match = await bcrypt.compare(password, user.password);
-//       if (!match) {
-//         return done(null, false, { message: "Incorrect password" })
-//       }
-
-//       return done(null, user);
-//     } catch (err) {
-//       return done(err);
-//     }
-//   })
-// );
-
-// passport.serializeUser((user, done) => {
-//   console.log("seriaolize", user)
-//   done(null, user.id);
-// });
-
-// passport.deserializeUser(async (id, done) => {
-//   console.log("deseriaolize", id)
-
-//   try {
-//     const { rows } = await db.query("SELECT * FROM users WHERE id = $1", [id]);
-//     const user = rows[0];
-
-//     done(null, user);
-//   } catch (err) {
-//     done(err);
-//   }
-// });
-
-app.use((req, res, next) => {
-  try {
-    const timestamp = new Date().toISOString();
-    const method = req.method;
-    const url = req.url || req.originalUrl || 'unknown';
-    console.log(`📝 ${timestamp} - ${method} ${url}`);
-    console.log("   └req.body ->", req.body)
-    //console.log(req.headers.cookie)
-    next();
-  } catch (error) {
-    console.error("❌ Erro no middleware de log:", error);
-    next(); // Continue mesmo com erro no log
-  }
-});
 
 app.use((req, res, next) => {
   res.locals.user = req.user;
-  console.log("user", req.user)
   next();
 });
 
-
-app.use("/user", userRouter)
-app.use("/auth", authRouter)
-app.use("/messages", messageRouter)
 
 app.get("/", (req, res) => {
   res.redirect("/messages")
 });
 
-
-// app.get("/log-in", (req, res) => res.render("log-in-form"));
-// app.get("/sign-up", (req, res) => res.render("sign-up-form"));
-// app.post("/sign-up", async (req, res, next) => {
-//   try {
-//     const hashedPassword = await bcrypt.hash(req.body.password, 10);
-//     await db.query("INSERT INTO users (username, password) VALUES ($1, $2)", [req.body.username, hashedPassword]);
-//     res.redirect("/");
-//   } catch (error) {
-//     console.error(error);
-//     next(error);
-//   }
-// });
-
-
-// app.get("/log-out", (req, res, next) => {
-//   req.logout((err) => {
-//     if (err) {
-//       return next(err);
-//     }
-//     res.redirect("/");
-//   });
-// });
+app.use("/user", userRouter)
+app.use("/auth", authRouter)
+app.use("/messages", messageRouter)
 
 
 app.use((err, req, res, next) => {
@@ -132,7 +53,6 @@ app.use((err, req, res, next) => {
     stack: process.env.NODE_ENV === 'development' ? err.stack : undefined
   });
 });
-
 
 app.listen(3000, (error) => {
   if (error) {

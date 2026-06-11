@@ -48,10 +48,6 @@ async function updateToAdmin(id) {
     }
 }
 
-
-
-
-
 export {
     insertNewMessage,
     queryAllMessages,

@@ -50,11 +50,6 @@ const newMessagePost = [validateMessage,
     }
 ]
 
-// async function newMessagePost(req, res) {
-//     await insertNewMessage(req.user.id, req.body.title, req.body.content);
-//     res.redirect("/");
-// }
-
 async function getAllMessage(req, res) {
     const { rows } = await queryAllMessages();
     res.render("index", { messages: rows });

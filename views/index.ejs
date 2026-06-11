@@ -19,7 +19,7 @@
           <% messages.map((message)=> { %>
             <div id=<%=message.id %> class="message-card">
               <strong>
-                <%= message.title %> - <%=message.id %>
+                <%= message.title %>
               </strong>
               <p>Posted by: <strong>
                   <% if (locals.user && user.is_member) {%>
@@ -37,9 +37,7 @@
                     <input class="del-btn" type="submit" value="Del">
                   </form>
                   <% } %>
-
             </div>
-
             <% }) %>
         </div>
 
