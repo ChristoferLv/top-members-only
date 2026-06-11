@@ -7,12 +7,19 @@ const validateMessage = [
 ];
 
 async function newMessageGet(req, res) {
-    res.render("create-message-form");
+    if (!req.user.is_member) {
+        res.redirect("/messages");
+    } else {
+        res.render("create-message-form");
+    }
 }
 admError: true
 
 const newMessagePost = [validateMessage,
     async (req, res) => {
+        if (!req.user.is_member) {
+            res.redirect("/messages");
+        }
         const errors = validationResult(req);
         const errorsObj = {};
         errors.array().forEach(error => {

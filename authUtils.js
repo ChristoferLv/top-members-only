@@ -31,7 +31,7 @@ passport.serializeUser((user, done) => {
 
 passport.deserializeUser(async (id, done) => {
   try {
-    const { rows } = await db.query("SELECT * FROM users WHERE id = $1", [id]);
+    const { rows } = await db.query("SELECT id, username, is_member, is_admin FROM users WHERE id = $1", [id]);
     const user = rows[0];
 
     done(null, user);
@@ -40,4 +40,4 @@ passport.deserializeUser(async (id, done) => {
   }
 });
 
-export {passport}
+export { passport }

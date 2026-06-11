@@ -22,14 +22,14 @@
                 <%= message.title %>
               </strong>
               <p>Posted by: <strong>
-                  <% if (locals.user) {%>
-                    <%= user.username %>
+                  <% if (locals.user && user.is_member) {%>
+                    <%= message.username %>
                       <% }else{ %>
                         <%= "Anonymous" %>
                           <%}%>
                 </strong>
               </p>
-              <p>At <%= message.added.toDateString() %>
+              <p>At <%= message.added.toDateString()%> - <%=message.added.toLocaleTimeString()%>
               </p>
               > <%= message.content %>
             </div>

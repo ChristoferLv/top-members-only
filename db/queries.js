@@ -17,7 +17,7 @@ async function insertNewMessage(author, title, content) {
 
 async function queryAllMessages() {
     try {
-        const result = await db.query("SELECT * FROM messages");
+        const result = await db.query("SELECT *, users.username FROM messages JOIN users ON users.id = messages.author ORDER BY added DESC");
         return result;
     } catch (error) {
         console.error('Query failed due to database error:', error.message);
