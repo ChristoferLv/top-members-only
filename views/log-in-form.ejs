@@ -20,23 +20,27 @@
                         <label for="username">
                             Username:
                         </label>
-                        <input type="text" id="username" name="username" placeholder="Enter your Username" required>
+                        <input type="text" id="username" name="username" placeholder="Enter your Username" required value="<%=locals.recoveredUsername%>">
 
                         <label for="password">
                             Password:
                         </label>
                         <input type="password" id="password" name="password" placeholder="Enter your Password" required>
-
-                        <div class="wrap">
-                            <button type="submit">
-                                Submit
-                            </button>
-                        </div>
-                        <p>Not registered?
-                            <a href="/auth/sign-up" style="text-decoration: none;">
-                                Create an account
-                            </a>
-                        </p>
+                        <% if (locals.errors) {%>
+                            <p class="error">
+                                <%=errors%>
+                            </p>
+                            <% } %>
+                                <div class="wrap">
+                                    <button type="submit">
+                                        Submit
+                                    </button>
+                                </div>
+                                <p>Not registered?
+                                    <a href="/auth/sign-up" style="text-decoration: none;">
+                                        Create an account
+                                    </a>
+                                </p>
                     </form>
                 </div>
                 <%}%>

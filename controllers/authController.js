@@ -15,16 +15,35 @@ const validateNewUser = [
 
 
 function loginGet(req, res) {
-    res.render("log-in-form")
+    const errors = req.session.messages || [];
+    req.session.messages = [];
+    res.render('log-in-form', { errors });
 }
 
-function loginPost(req, res) {
-    return passport.authenticate("local", {
-        successRedirect: "/",
-        failureRedirect: "/log-in",
-        failureMessage: true,
-    });
+function loginPost() {
+    return function (req, res, next) {
+        passport.authenticate('local', (err, user, info) => {
+            if (err) next(err);
+
+            if (!user) {
+                return res.render("log-in-form", { errors: "Wrong credentials, try again", recoveredUsername: req.body.username });
+            }
+
+            req.login(user, (err) => {
+                if (err) return next(err);
+                return res.redirect("/messages")
+            });
+        })(req, res, next);
+    };
 }
+
+// function loginPost(req, res) {
+//     return passport.authenticate("local", {
+//         successRedirect: "/messages",
+//         failureRedirect: "/auth/log-in",
+//         failureMessage: "Incorrect credentials, try again",
+//     });
+// }
 
 function registerGet(req, res) {
     res.render("sign-up-form")
