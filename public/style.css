@@ -124,3 +124,9 @@ button {
 .alert button:hover{
     background-color: rgb(211, 0, 35);
 }
+
+.error{
+    text-align: start;
+    margin-top: -12px;
+    margin-left: 5px;
+}
