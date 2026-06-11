@@ -50,7 +50,6 @@ h1 {
 
 .message-card {
     border: 1px solid black;
-    max-width: 15vw;
     background-color: #fefefe;
     padding: 5px;
     display: flex;
