@@ -1,3 +1,4 @@
+import { check } from "express-validator";
 import { db } from "./pools.js";
 
 async function insertNewMessage(author, title, content) {
@@ -26,7 +27,7 @@ async function queryAllMessages() {
 
 async function deleteMessageById(id) {
     try {
-        await db.query("DELETE FROM messages WHERE id=$1",[id]);
+        await db.query("DELETE FROM messages WHERE id=$1", [id]);
     } catch (error) {
         console.error('Query failed due to database error:', error.message);
     }
@@ -48,11 +49,21 @@ async function updateToAdmin(id) {
     }
 }
 
+async function checkUsernameUsed(username) {
+    try {
+        const { rows } = await db.query("SELECT * FROM users WHERE username=$1", [username]);
+        return rows.length > 0;
+    } catch (error) {
+        console.error('Query failed due to database error:', error.message);
+    }
+}
+
 export {
     insertNewMessage,
     queryAllMessages,
     updateToMember,
     updateToAdmin,
-    deleteMessageById
+    deleteMessageById,
+    checkUsernameUsed
 }
 

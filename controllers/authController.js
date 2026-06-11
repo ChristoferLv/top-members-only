@@ -1,7 +1,7 @@
 import bcrypt from 'bcryptjs';
 import { db } from "../db/pools.js";
 import { passport } from "../authUtils.js"
-import { updateToAdmin, updateToMember } from '../db/queries.js';
+import { checkUsernameUsed, updateToAdmin, updateToMember } from '../db/queries.js';
 import { body, matchedData, validationResult } from "express-validator";
 
 const MEMBER_SECRET_CODE = 123;
@@ -9,8 +9,20 @@ const ADMIN_SECRET_CODE = 321;
 
 
 const validateNewUser = [
-    body("username").matches(/^[a-zA-Z0-9\s\-.]+$/).withMessage("Username can only contain letters, numbers, space, - and .").trim().isLength({ min: 3 }).withMessage("Username must have at leats 3 characteres").isLength({ max: 30 }).withMessage("The maximum username length is 30"),
-    body("password").trim().isLength({ min: 3 }).withMessage("Password must have at leats 3 characteres").isLength({ max: 50 }).withMessage("The maximum password length is 50")
+    body("username").matches(/^[a-zA-Z0-9\s\-.]+$/).withMessage("Username can only contain letters, numbers, space, - and .")
+        .trim()
+        .isLength({ min: 3 }).withMessage("Username must have at leats 3 characteres")
+        .isLength({ max: 30 }).withMessage("The maximum username length is 30")
+        .custom(async value => {
+            const exists = await checkUsernameUsed(value);
+            if (exists)
+                throw new Error('Username already in use');
+            return true;
+        }).withMessage("Username is already in use"),
+    body("password").trim().isLength({ min: 3 }).withMessage("Password must have at leats 3 characteres").isLength({ max: 50 }).withMessage("The maximum password length is 50"),
+    body('confirmPassword').custom((value, { req }) => {
+        return value === req.body.password;
+    }).withMessage("Password fields must match"),
 ];
 
 
@@ -83,7 +95,10 @@ function logout(req, res, next) {
         if (err) {
             return next(err);
         }
-        res.redirect("/");
+        req.session.destroy((err) => {
+            res.clearCookie("connect.sid");
+            res.redirect("/");
+        });
     });
 }
 
