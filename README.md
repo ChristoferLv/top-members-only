@@ -76,6 +76,10 @@ npm run dev
 - connect-pg-simple
 - bcryptjs
 
+## Visualization
+
+<img width="1910" height="915" alt="members_only_screenshot" src="https://github.com/user-attachments/assets/fe0bf123-6985-47a4-a5ae-47761a3135a2" />
+
 ---
 
 Project developed following: [The Odin Project - Members Only](https://www.theodinproject.com/lessons/node-path-nodejs-members-only)
