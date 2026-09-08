@@ -54,7 +54,8 @@ h1 {
     padding: 5px;
     display: flex;
     flex-direction: column;
-    word-break: break-all;
+    word-break: normal;
+    overflow-wrap: anywhere;
     white-space: normal;
     position: relative;
     padding-bottom: 30px;
